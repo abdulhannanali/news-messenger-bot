@@ -1,0 +1,19 @@
+{
+  "name": "news-messenger-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.0.0-rc.3",
+    "cheerio": "^0.20.0",
+    "messenger-bot": "^2.2.0",
+    "qs": "^6.1.0",
+    "yql": "^1.0.2"
+  }
+}

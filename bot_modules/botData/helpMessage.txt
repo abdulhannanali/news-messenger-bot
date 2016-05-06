@@ -1,0 +1,3 @@
+Type a query or type "categories" to see 
+all the amazing categories you can select from. 
+The query can be anything such as "top stories", "mark zuckerberg" etc.

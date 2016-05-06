@@ -1,0 +1,4 @@
+An open source bot which uses awesome https://news.google.com RSS Feeds
+to give you up to date information always. Contribute to source code 
+at https://github.com/abdulhannanali/news-messenger-bot :D  
+Happy getting up to date always!
