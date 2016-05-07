@@ -29,15 +29,11 @@ module.exports = function () {
         var templates = []
         
         templates.push({
-            text: "Hey there! Let's get talking! Type anything you want news about for the latest news regarding the topic! You'll get the same results as news.google.com"
-        })
-        
-        templates.push({
             attachment: {
                 type: "template",
                 payload: {
                     template_type: "button",
-                    text: "In order to get the best possible results, you can also do some of the stuff described below.",
+                    text: "Hey there Let's get talking! type a query you want news about or you can also do some of the stuff described below.",
                     buttons: [
                         {
                             type: "postback",
