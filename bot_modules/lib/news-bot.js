@@ -4,7 +4,7 @@ const async = require("async")
 
 module.exports = function (bot) {
     const news = require("../../lib/news")
-    const readability = require("../../lib/readability")(process.env["READABILITY_TOKEN"], process.env["READABILITY_SECRET"])
+    const resolver = require("../../lib/image-resolver") 
     
         const topics = news.googleTopics
     
@@ -25,25 +25,27 @@ module.exports = function (bot) {
                 return sendNotFound(payload, reply)
             }
  
-            var links = articles.forEach(function (article) {
+            var links = articles.map(function (article) {
                 return article.simpleLink
             })
             
-            async.map(links, readability.parse, function (error, parsedArticles) {
-                var finalArticles = articles.map(function (article, index, array) {
-                    var parsedArticle = parsedArticles[index]
+            resolver.resolveUrls(links, function (error, images) {
+                if (!error && images) {
+                   
+                    articles = articles.map(function (article, index) {
+                        var imageData = images[index]
+                        if (article && imageData) {
+                            article["lead_image_url"] = imageData["image"]
+                        }
+                        
+                        return article
+                    })
                     
-                    if (parsedArticle) {
-                        article["lead_image_url"] = parsedArticle["lead_image_url"]
-                        article["excerpt"] = parsedArticle["excerpt"]
-                    }
-                    
-                    return article
-                })
+                }
                 
-                var articlesMessage = templator.newsArticlesGenericTemplate(finalArticles)
-                 
-                reply(articlesMessage, cb)
+                var articlesTemplate = templator.newsArticlesGenericTemplate(articles)
+                
+                reply(articlesTemplate, cb)
             })
         })
     }
