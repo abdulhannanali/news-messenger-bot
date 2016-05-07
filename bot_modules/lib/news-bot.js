@@ -54,7 +54,7 @@ module.exports = function (bot) {
         reply(templator.notFoundTemplate(), cb)
     }
     
-    function sendCategories (payload, reply) {
+    function sendCategories (payload, reply, cb) {
         reply(templator.categoriesTemplate(), cb)
     }
    

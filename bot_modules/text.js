@@ -1,5 +1,7 @@
 const async = require("async")
 const wait = require("./lib/waitMessages")()
+const welcome = require("./lib/welcomeStuff")()
+// const replyHandler = require("./lib/replyHandler.js")(process.env["NODE_ENV"])
 
 module.exports = function (bot) {
     const newsBot = require("./lib/news-bot")(bot)
@@ -22,19 +24,40 @@ module.exports = function (bot) {
             ])
         }
         else if (text == "about") {
-            newsBot.sendAbout(payload, reply)
+            async.series([
+              (callback) => reply({text: "Here is about information!"}, callback),  
+              (callback) => newsBot.sendAbout(payload, reply, callback)  
+            ])
+        }
+        else if (text == "info") {
+            async.series([
+                (callback) => reply({text: "Information we have about you"}, callback),
+                (callback) => {
+                    bot.getProfile(payload.sender.id, (error, profile) => {
+                        if (error) {
+                            return callback(error)
+                        }
+                        else {
+                            async.parallel([
+                                (callback) => reply({text: "First Name: " + profile.first_name}, callback),
+                                (callback) => reply({text: "Last Name: " + profile.last_name}, callback),
+                                (callback) => reply({attachment: {type:"image", payload: {url: profile.profile_pic}}}, callback)
+                            ])
+                        }
+                    })
+                }
+            ])
+        }
+        else if (text == "welcome_message") {
+            welcome.sendWelcomeMessage(bot, payload, reply)
         }
         else {
             async.series([
                 (callback) => wait.waitSearchQuery(payload, reply, callback),
-                (callback) => wait.searchResultHead(payload, reply, callback)
-            ])
-            newsBot.sendGenericNews(text, undefined, payload, reply, (error, articles) => {
-                if (!articles || !articles[0]) {
-                    newsBot.sendNotFound(payload, reply, callback)
-                }
-            })    
-               
+                (callback) => wait.searchResultHead(payload, reply, callback),
+                (callback) => reply({text: "Articles for " + text}, callback),
+                (callback) => newsBot.sendGenericNews(text, undefined, payload, reply, callback)  
+            ])    
         }
     }
     
