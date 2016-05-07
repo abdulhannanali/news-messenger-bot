@@ -13,6 +13,7 @@
     "async": "^2.0.0-rc.3",
     "cheerio": "^0.20.0",
     "colors": "^1.1.2",
+    "image-resolver": "^0.5.4",
     "messenger-bot": "^2.2.0",
     "qs": "^6.1.0",
     "yql": "^1.0.2"
