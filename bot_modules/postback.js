@@ -27,12 +27,36 @@ module.exports = function (bot) {
                 newsBot.sendGenericNews(match[1], undefined, data, reply)    
             }
         }
+        else if (match = postback.match(/GET_SUMMARY_(.*)/i)) {
+            if (match && match[1]) {
+                var summaryPayload = JSON.parse(match[1])
+                if (!summaryPayload) {
+                    return
+                }
+                reply({
+                    attachment: {
+                        type: "template",
+                        payload: {
+                            template_type: "button",
+                            text: summaryPayload.summary,
+                            buttons: [
+                                {
+                                    type: "web_url",
+                                    title: "Read full article!",
+                                    url: summaryPayload.link
+                                }
+                            ]
+                        }
+                    }
+                }, console.log)
+            }
+        }
         else if (match = postback.match(/ARTICLE_INFO_(.*)/i)) {
             if (match[1]) {
                 var newsInfo = JSON.parse(match[1])
                 newsBot.sendNewsInfo(newsInfo, data, reply, console.log)
             }
         }
-        // else if (match = postback.match(/ARTICLES_/i)) {}
+        
     })
 }

@@ -55,6 +55,19 @@ function newsArticleElement (article) {
         )
     }
     
+    if (article["summary"]) {
+        var summaryPayload = {
+            link: article["simpleLink"] || article["link"],
+            summary: article["summary"]
+        }
+        
+        buttons.push({
+            type: "postback",
+            title: "Get Summary!",
+            payload: "GET_SUMMARY_" + JSON.stringify(summaryPayload)
+        })
+    }
+    
     buttons.push((() => {
         var data = {
             title: article["title"],
