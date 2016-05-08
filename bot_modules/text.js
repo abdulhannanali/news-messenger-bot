@@ -54,8 +54,6 @@ module.exports = function (bot) {
         else {
             async.series([
                 (callback) => wait.waitSearchQuery(payload, reply, callback),
-                (callback) => wait.searchResultHead(payload, reply, callback),
-                (callback) => reply({text: "Articles for " + text}, callback),
                 (callback) => newsBot.sendGenericNews(text, undefined, payload, reply, callback)  
             ])    
         }
