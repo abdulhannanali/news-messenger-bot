@@ -1,13 +1,10 @@
 const templator = require("../templates/templator")
 const async = require("async")
-
-
+const news = require("../../lib/news")
+const resolver = require("../../lib/image-resolver") 
+const topics = news.googleTopics
+    
 module.exports = function (bot) {
-    const news = require("../../lib/news")
-    const resolver = require("../../lib/image-resolver") 
-    
-        const topics = news.googleTopics
-    
     function sendGenericNews (query, topic, payload, reply, cb) {
         if (cb) {
             cb = (() => {})    
@@ -45,7 +42,7 @@ module.exports = function (bot) {
                 
                 var articlesTemplate = templator.newsArticlesGenericTemplate(articles)
                 
-                reply(articlesTemplate, cb)
+                reply(articlesTemplate, console.log)
             })
         })
     }
@@ -69,12 +66,28 @@ module.exports = function (bot) {
     function sendAbout (payload, reply, cb) {
         async.map(templator.aboutTemplate(), reply, console.log)
     }
+    
+    function sendNewsInfo (newsInfo, payload, reply, cb) {
+        if (!newsInfo) {
+            throw new Error("No info provided to send back to the user!")    
+        }   
+        
+        var messageCalls = templator.newsInfoTemplate(newsInfo).map(function (template, index, array) {
+            return (callback) => {
+                reply(template, callback)
+            }
+        })
+        
+        async.series(messageCalls, cb)
+        
+    }
    
     return {
         sendGenericNews: sendGenericNews,
         sendNotFound: sendNotFound,
         sendCategories: sendCategories,
         sendHelp: sendHelp,
-        sendAbout: sendAbout
+        sendAbout: sendAbout,
+        sendNewsInfo: sendNewsInfo
     }
 }

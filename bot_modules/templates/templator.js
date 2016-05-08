@@ -55,11 +55,28 @@ function newsArticleElement (article) {
         )
     }
     
+    buttons.push((() => {
+        var data = {
+            title: article["title"],
+            guid: article["guid"],
+            pubDate: article["pubDate"],
+            link: article["simpleLink"],
+            lead_image_url: article["lead_image_url"]
+        }
+        
+        
+        return ({
+            type: "postback",
+            title: "Get more info!",
+            payload: "ARTICLE_INFO_" + JSON.stringify(data)
+        }) 
+    })())
+    
     
     return {
         title: article["title"] || "no title found!",
         item_url: article["simpleLink"] || notfoudurl,
-        subtitle: article["excerpt"] || "",
+        subtitle: "Headline: " + article["title"],
         image_url: article["lead_image_url"] || not_found_image,
         buttons: buttons
     }
@@ -247,11 +264,39 @@ function aboutTemplate (
     return aboutMessages
 }
 
+function newsInfoTemplate (newsInfo) {
+    var templates = []
+    var imageUrl = newsInfo["lead_image_url"]
+    
+    templates.push({
+        text: `Information about article with Title:\n${newsInfo["title"]}\nLink: ${newsInfo["link"]}` 
+    })
+    
+    templates.push({
+        text: `Date published: ${newsInfo["pubDate"]}`
+    })
+    
+    if (imageUrl) {
+        templates.push({
+            attachment: {
+                type: "image",
+                payload: {
+                    url: imageUrl
+                }
+            }
+        })
+    }
+    
+    return templates
+    
+}
+
 module.exports = {
     newsArticleElement: newsArticleElement,
     newsArticlesGenericTemplate: newsArticlesGenericTemplate,
     notFoundTemplate: notFoundTemplate,
     categoriesTemplate: categoriesTemplate,
     helpTemplate: helpTemplate,
-    aboutTemplate: aboutTemplate
+    aboutTemplate: aboutTemplate,
+    newsInfoTemplate: newsInfoTemplate
 }
