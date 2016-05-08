@@ -34,6 +34,9 @@ module.exports = function (bot) {
                     return
                 }
                 reply({
+                    text: "Here's the summary! 😘 😘 😘 😘 "
+                })
+                reply({
                     attachment: {
                         type: "template",
                         payload: {

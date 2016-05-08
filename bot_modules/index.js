@@ -7,6 +7,7 @@
 module.exports = function (bot) {
     var text = require("./text")(bot)
     var postback = require("./postback")(bot)
+    var stickers = require("./lib/sticker")(bot)
     
     if (!bot || ! typeof bot == "object") {
         throw new Error("Proper instance of bot not provided!")
@@ -16,5 +17,10 @@ module.exports = function (bot) {
         if (payload && payload.message.text) {
             text.handleText(payload, reply)      
         }
+        else if (payload && payload.message.sticker_id) {
+            stickers.handleSticker(payload, reply)
+        }        
+        // Implementation of Sticker Stuff
+        
     })
 }
